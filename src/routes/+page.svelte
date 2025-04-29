@@ -38,31 +38,59 @@
   }
 </script>
 
-<h1>Welcome to To-Do App</h1>
-<h2>Todo List</h2>
-<input
-  type="text"
-  bind:value={todoText}
-  placeholder="Enter a new todo"
-  onkeydown={(e) => {
-    if (e.key === "Enter" && todoText) {
-      addTodo(todoText);
-      todoText = "";
-    }
-  }}
-/>
-<ul>
-  {#each todoList as todo}
-    <li>
-      <input type="checkbox" bind:checked={todo.completed} />
-      {todo.text}
-      <button onclick={() => removeTodo(todo.id)}>Remove</button>
-      <button
-        onclick={() => {
-          const newText = prompt("Update todo text", todo.text);
-          updateTodo(todo.id, newText || todo.text);
-        }}>Rename</button
-      >
-    </li>
-  {/each}
-</ul>
+<div class="container mx-auto max-w-3xl p-4">
+  <ul>
+    {#each todoList as todo}
+      <li class="mb-2">
+        <div
+          class="card p-4 preset-filled-surface-100-900 flex items-center justify-between gap-4"
+        >
+          <div class="flex items-center gap-2">
+            <input
+              type="checkbox"
+              class="checkbox rounded w-5 h-5 accent-primary-500 cursor-pointer"
+              bind:checked={todo.completed}
+            />
+            <span
+              style:text-decoration={todo.completed ? "line-through" : "none"}
+            >
+              {todo.text}
+            </span>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="btn preset-tonal-error text-sm"
+              onclick={() => removeTodo(todo.id)}
+            >
+              Remove
+            </button>
+            <button
+              class="btn preset-tonal-surface text-sm"
+              onclick={() => {
+                const newText = prompt("Update todo text", todo.text);
+                if (newText !== null) {
+                  updateTodo(todo.id, newText || todo.text);
+                }
+              }}
+            >
+              Rename
+            </button>
+          </div>
+        </div>
+      </li>
+    {/each}
+  </ul>
+
+  <input
+    type="text"
+    class="input mb-6"
+    bind:value={todoText}
+    placeholder="Enter a new todo"
+    onkeydown={(e) => {
+      if (e.key === "Enter" && todoText) {
+        addTodo(todoText);
+        todoText = "";
+      }
+    }}
+  />
+</div>
